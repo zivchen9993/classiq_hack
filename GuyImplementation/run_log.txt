@@ -1,0 +1,49 @@
+========================================================================
+STAGE 1  demand field evolution (lattice Boltzmann)
+  mass conservation      : 1.000000
+  demand peak shift      : [3 2] cells over 20 steps
+  prediction L1 error    : 0.3551
+========================================================================
+STAGE 2  network simulation + exhaustive landscape
+  evaluated 512 configs in 1.0s
+  exact optimum          : E = -0.9375  F = 0.9375
+  landscape spread       : E in [-0.9375, 0.0547]
+========================================================================
+STAGE 3  Walsh-Hadamard -> Ising Hamiltonian
+  kappa (deg<=2 energy)  : 0.9560
+  2-local RMSE           : 0.03938   (landscape sd 0.18780)
+  rank correlation       : 0.9768
+  2-local optimum gap    : 0.00000
+  |h| range              : 0.0005 .. 0.1035
+  |J| max                : 0.0637
+  strongest couplings    : (4,8) J=-0.0637, (0,6) J=+0.0365, (2,3) J=+0.0297
+========================================================================
+STAGE 4  QAOA on H_C^(2)
+  p=1  approx-ratio 0.478   P(gs)=0.0412   sampled-best gap 0.00000   OPTIMAL
+  p=2  approx-ratio 0.691   P(gs)=0.1199   sampled-best gap 0.00000   OPTIMAL
+  p=3  approx-ratio 0.756   P(gs)=0.1796   sampled-best gap 0.00000   OPTIMAL
+========================================================================
+STAGE 5  benchmark against classical baselines
+  method                       F_safe     cov      thr    drop      HO   config
+  -----------------------------------------------------------------------------
+  static (all down)            0.8429   0.758     2.40   0.806   0.926   +++++++++
+  random                       0.6041   0.750     2.30   0.786   0.923   +++++++--
+  greedy coord-ascent          0.9375   0.754     2.58   0.799   0.939   ---++++++
+  QAOA p=3                     0.9375   0.754     2.58   0.799   0.939   ---++++++
+  exhaustive optimum           0.9375   0.754     2.58   0.799   0.939   ---++++++
+========================================================================
+STAGE 6  proactive vs reactive, scored on the TRUE future demand
+  method                       F_safe     cov      thr    drop      HO   config
+  -----------------------------------------------------------------------------
+  static tilts                 0.6958   0.792     4.05   0.839   0.929   +++++++++
+  reactive (demand now)        0.5768   0.778     3.84   0.840   0.940   -+-+-++-+
+  proactive (LBM predicted)    0.8288   0.791     3.82   0.859   0.937   ---++++++
+  oracle (true future)         0.9150   0.795     4.21   0.859   0.933   +-++++++-
+
+  proactive - reactive   : +0.2520 utility
+  proactive - static     : +0.1331 utility
+  share of the remaining oracle gap closed : 74.5%
+========================================================================
+total runtime 8.6s
+wrote results.json and landscape.npz
+wrote fig1_demand.png fig2_walsh.png fig3_qaoa.png fig4_headline.png
