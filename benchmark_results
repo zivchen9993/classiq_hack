@@ -1,0 +1,100 @@
+================================================================================
+ANTENNA TILT OPTIMIZATION -- QUANTUM/CLASSICAL BENCHMARK
+================================================================================
+
+Flagship instance: 6 sectors, 3 tilt levels [0.0, 4.0, 8.0]
+  coupled sector pairs : 15 (interference 15, handover 10)
+  search space         : 729 configurations
+  qubits (one-hot)     : 18
+
+--------------------------------------------------------------------------------
+1. SURROGATE VALIDATION -- does the QUBO track the real network?
+--------------------------------------------------------------------------------
+  400 random configurations (SINR spans 5.12..8.81 dB, handover failure 4.7..35.7%)
+
+  QUBO term                vs KPI                    rho   want
+  --------------------------------------------------------------
+  coverage term            outage %               -0.849   negative  OK 
+  interference term        mean SINR              -0.651   negative  OK 
+  coverage+interference    mean SINR              -0.639   negative  OK 
+  coverage+interference    spectral eff.          -0.591   negative  OK 
+  handover term            handover failure %     +0.894   positive  OK 
+
+  The objective is multi-objective by construction: interference
+  suppression and handover reliability genuinely oppose each other,
+  so no single KPI should track the total. Each term tracks its own.
+
+--------------------------------------------------------------------------------
+2. SOLVER COMPARISON + NETWORK KPIs (exact joint-SINR simulation)
+--------------------------------------------------------------------------------
+
+solver                     objective       gap        time       evals
+-----------------------------------------------------------------------
+best uniform tilt           -1.24889  +0.36634       0.0ms           3
+greedy local search         -1.61524  +0.00000       0.5ms          37
+greedy (20 restarts)        -1.61524  +0.00000       9.1ms         546
+simulated annealing         -1.61524  +0.00000     309.6ms      13,368
+QAOA-XY local (p=3)         -1.61524  +0.00000   71535.0ms         278
+brute force (exact)         -1.61524  +0.00000       9.9ms         729
+
+solver                        SINR      edge   sp.eff   outage   HO fail
+-----------------------------------------------------------------------
+best uniform tilt            7.23dB    -0.51dB    2.777     6.2%     10.3%
+greedy local search          8.63dB    -1.01dB    3.184     6.0%     29.7%
+greedy (20 restarts)         8.63dB    -1.01dB    3.184     6.0%     29.7%
+simulated annealing          8.63dB    -1.01dB    3.184     6.0%     29.7%
+QAOA-XY local (p=3)          8.63dB    -1.01dB    3.184     6.0%     29.7%
+brute force (exact)          8.63dB    -1.01dB    3.184     6.0%     29.7%
+
+Optimized per-sector tilts vs 'best uniform tilt' (one network-wide tilt = today's practice):
+  mean SINR              7.23 dB ->   8.63 dB  (+1.40 dB)
+  cell-edge SINR        -0.51 dB ->  -1.01 dB  (-0.50 dB)
+  spectral efficiency   2.777    ->  3.184     (+14.6% throughput)
+  outage                  6.2 %  ->    6.0 %   (-0.2 pp)
+  handover failures      10.3 %  ->   29.7 %   (+19.3 pp)
+
+--------------------------------------------------------------------------------
+3. PARETO FRONTIER -- the weights are an operator policy dial
+--------------------------------------------------------------------------------
+
+ w_cov  w_int   w_ho |     SINR   sp.eff   outage   HO fail |                tilts
+------------------------------------------------------------------------------------
+uniform    (baseline) |    7.23dB    2.777     6.2%     10.3% |   [1, 1, 1, 1, 1, 1]
+------------------------------------------------------------------------------------
+ 0.400  0.350  0.250 |    8.63dB    3.184     6.0%     29.7% |   [2, 2, 2, 1, 1, 1]
+ 0.375  0.325  0.300 |    8.63dB    3.184     6.0%     29.7% |   [2, 2, 2, 1, 1, 1]
+ 0.350  0.300  0.350 |    7.41dB    2.828     6.6%     18.5% |   [2, 1, 1, 1, 1, 1]
+ 0.325  0.275  0.400 |    7.41dB    2.828     6.6%     18.5% |   [2, 1, 1, 1, 1, 1]
+ 0.300  0.250  0.450 |    7.41dB    2.828     6.6%     18.5% |   [2, 1, 1, 1, 1, 1]
+ 0.300  0.200  0.500 |    7.23dB    2.777     6.2%     10.3% |   [1, 1, 1, 1, 1, 1]
+
+--------------------------------------------------------------------------------
+4. HARDNESS -- where classical local search actually breaks down
+--------------------------------------------------------------------------------
+
+  flagship (6 sectors, 3 tilts): 18 qubits, 729 configurations
+    greedy reaches the global optimum in 100% of 200 random starts
+    distinct local optima found: 1
+    optimum tilt indices: [2, 2, 2, 1, 1, 1]
+
+  larger  (9 sectors, 4 tilts): 36 qubits, 262,144 configurations
+    greedy reaches the global optimum in 33% of 200 random starts
+    distinct local optima found: 2
+    optimum tilt indices: [2, 2, 1, 2, 1, 2, 2, 1, 1]
+
+--------------------------------------------------------------------------------
+5. SCALING -- why this needs more than brute force
+--------------------------------------------------------------------------------
+
+ towers  sectors           configurations   qubits      brute force
+--------------------------------------------------------------------
+      1        3                       64       12            0.0 s
+      2        6                    4,096       24            0.0 s
+      3        9                  262,144       36            2.9 s
+      4       12               16,777,216       48          3.1 min
+      5       15            1,073,741,824       60         0.1 days
+      6       18           68,719,476,736       72         8.8 days
+      7       21        4,398,046,511,104       84       1.55 years
+      8       24      281,474,976,710,656       96       99.2 years
+
+================================================================================
