@@ -21,14 +21,35 @@ working conventions this file exists to satisfy.
 | Figures | `visualize.py` -> `figures/` | 6 figures generated. |
 | **Temporal: mobility** | `mobility.py` | **Working.** Moving-hotspot demand; snapshots share the link budget. |
 | **Temporal: core** | `temporal.py` | **Working.** Shared candidate pool, exact DP, budget DP, policies, temporal QUBO. QUBO reproduces DP to 6.7e-15. |
-| **Temporal: benchmark** | `temporal_benchmark.py` | **Running now** -- see "In flight". |
+| **Temporal: benchmark** | `temporal_benchmark.py` | **Done.** Full run completed; results below. |
+| **Temporal: figures** | `temporal_visualize.py` -> `figures/temporal_*.png` | **Done.** 4 figures, generated from saved JSON (no QAOA re-run needed). |
 
-### In flight
+### Temporal results (run `2026_09_08__17_38_03`, 9 sectors x 4 tilts, H=8)
 
-- `temporal_benchmark.py` full run. Expected ~3-6 min on CPU (numpy only, no
-  GPU used anywhere in this project). Sections 0-3 are sub-second; the time
-  is almost entirely the two QAOA solves in sections 4 and 4b
-  (48 qubits, 6^8 = 1,679,616-amplitude feasible subspace, p=4 with INTERP).
+1. **The coherence premise holds.** Demand drifts steadily but only
+   **0.86 of 9 sectors** change optimum per step, and the cost of not
+   retuning collapses to ~0 after step 2. The previous solution IS a good
+   warm start.
+2. **Planning has a real operating window.** For switching weight
+   lam in **[0.01, 0.06]** the planned trajectory strictly beats both
+   "never retune" and "chase the optimum". Outside it the optimum
+   degenerates to one of those baselines -- shown, not hidden.
+3. **At lam=0.04:** DP J=0.1806 vs static 0.2408, greedy 0.2400,
+   hysteresis 0.2147. DP uses 3 sector-moves in **1 event**; greedy uses 6
+   moves across 4 events.
+4. **The objective gain does NOT reach the network.** 25% better surrogate
+   objective produced **-0.03 dB SINR** and **+0.3pp handover failure** --
+   i.e. within noise of never retuning, at the cost of 3 antenna moves.
+   This is the surrogate ceiling, measured rather than assumed, and it
+   bounds what ANY optimizer can deliver here, quantum or classical.
+5. **QAOA lost to DP outright.** On the 48-qubit chain encoding, p=4 did
+   **not** reach the optimum (0.19518 vs 0.18061) after **388 s**; DP is
+   exact in **0.2 ms**. On the budget encoding QAOA did find the optimum
+   (P(opt) 0.473%) in 311 s -- still versus 1 ms for DP.
+6. Per-sector switch counts on the DP trajectory max out at **1**, so a
+   per-sector switch limit would not even bind on this instance. The
+   Level 3 hardness is real in principle but **not exercised here**, and
+   the benchmark says so explicitly.
 
 ### Known issues, not yet fixed
 
