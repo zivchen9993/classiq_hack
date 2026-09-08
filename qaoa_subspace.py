@@ -186,12 +186,19 @@ def _interp_init(params_p, p_old: int) -> np.ndarray:
 def solve_qaoa_subspace(qubo, p: int = 3, seed: int = 0, maxiter: int = 250,
                         quantile: float = 0.15, n_restarts: int = 3,
                         n_shots: int = 2000, topology: str = "chain",
-                        interp: bool = True) -> SubspaceResult:
+                        interp: bool = True, init_params=None) -> SubspaceResult:
     """Run the constrained QAOA exactly, in the feasible subspace.
 
     interp=True builds the depth-p schedule by optimizing depths 1..p in
     sequence, seeding each from the previous one (INTERP). This is markedly
     more reliable than optimizing 2p parameters from scratch.
+
+    init_params gives QAOA the warm start the temporal problem makes available:
+    pass the previous timestep's optimized schedule (length 2p) and the
+    optimizer refines from there instead of searching from cold. It overrides
+    `interp` and `n_restarts`, since both exist only to find a starting point.
+    This is QAOA's counterpart to DCQO's bias field, and `dcqo_benchmark.py`
+    compares the two warm-start mechanisms directly.
     """
     S, T = qubo.n_sectors, qubo.n_tilts
     t0 = time.perf_counter()
@@ -210,7 +217,14 @@ def solve_qaoa_subspace(qubo, p: int = 3, seed: int = 0, maxiter: int = 250,
             return _cvar_from_probs(probs, cost_flat, quantile)
         return objective
 
-    if interp:
+    if init_params is not None:
+        x0 = np.asarray(init_params, dtype=float).ravel()
+        if x0.size != 2 * p:
+            raise ValueError(f"init_params must have length 2p={2 * p}, got {x0.size}")
+        res = minimize(make_objective(p), x0, method="COBYLA",
+                       options={"maxiter": maxiter, "rhobeg": 0.05})
+        params = res.x
+    elif interp:
         # --- optimize depth 1 from random restarts, then climb with INTERP ---
         obj1 = make_objective(1)
         best_params, best_val = None, np.inf
