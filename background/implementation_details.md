@@ -12,7 +12,6 @@
 - You don't have to ask me about every file change/ file creation/ directory creation. Ask me only before doing things that could harm my computer or work. Deleting temporary files you created during the run is also fine.
 - I want to reduce token usage upon failed runs, so please write down to a file all the things you plan to do at the beginning of the run (unless it is already written in a known file), and frequently update where you stand so it would be easy to continue when I have resume the run.
 - Please add prints to necessary runs, so I can understand how things progress, especially to very long runs.
-- When possible, write before each run how much time approximately it is supposed to take on the remote A100 GPU (on a single GPU).
 - Say what I should run in a more explicit manner. you don't have to write all commands in the prompt, but state exactly where I find those full commands (not only the file, but the line/ command itself in the file), and if possible, create a command to run sequentially until there is an error.
 - Make the output directory name (the part according to the date) automatically generated. The format is yyyy_MM_dd__hh_mm_ss, where yyyy is the year, MM is the month, dd is the day, hh is the hour, mm is the minute, and ss is the second.
 - Implement to run in parallel whatever possible (like calculating the same thing over all nodes).  
