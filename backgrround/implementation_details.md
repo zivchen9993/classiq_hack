@@ -8,7 +8,6 @@
 - Try to make explanations concise and simple.
 - Begin with the easiest and basic things, only after we make sure it works, we would continue to more complex things.
 - When showing new results, please show in informatic graphs.
-- The original Wang et al. code with modifications for the reduced frequency H-step is under `./Wang_et_al_code_with_modifications/`. It shouldn't be modified. Use it as a reference and for comparison, but do not change it.
 - Pretty much everything should be toggleable.
 - You don't have to ask me about every file change/ file creation/ directory creation. Ask me only before doing things that could harm my computer or work. Deleting temporary files you created during the run is also fine.
 - I want to reduce token usage upon failed runs, so please write down to a file all the things you plan to do at the beginning of the run (unless it is already written in a known file), and frequently update where you stand so it would be easy to continue when I have resume the run.
@@ -16,6 +15,5 @@
 - When possible, write before each run how much time approximately it is supposed to take on the remote A100 GPU (on a single GPU).
 - Say what I should run in a more explicit manner. you don't have to write all commands in the prompt, but state exactly where I find those full commands (not only the file, but the line/ command itself in the file), and if possible, create a command to run sequentially until there is an error.
 - Make the output directory name (the part according to the date) automatically generated. The format is yyyy_MM_dd__hh_mm_ss, where yyyy is the year, MM is the month, dd is the day, hh is the hour, mm is the minute, and ss is the second.
-- Implement to run in parallel whatever possible (like calculating the same thing over all nodes). 
-- When writing commands to paste in the terminal for running experiments, please use GPU devices 0, and 1 only.  
+- Implement to run in parallel whatever possible (like calculating the same thing over all nodes).  
 - When writing commands to paste in the terminal for running experiments, don't say `choose parameters according to...`, make the choice automatic according to previous results.
