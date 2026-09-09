@@ -59,7 +59,7 @@ def subspace_cost(qubo) -> np.ndarray:
     what the classical baselines minimize.
     """
     S, T = qubo.n_sectors, qubo.n_tilts
-    cost = np.zeros((T,) * S)
+    cost = np.full((T,) * S, float(getattr(qubo, "objective_offset", 0.0)))
 
     # unary coverage term
     for i in range(S):
@@ -78,6 +78,16 @@ def subspace_cost(qubo) -> np.ndarray:
             shape[i] = T
             shape[j] = T
             cost += weight * np.asarray(table).reshape(shape)
+
+    # Formulation-specific terms are already weighted.  Direct temporal
+    # QUBOs use this channel for cross-timestep switching edges, keeping those
+    # coefficients separate from the RF handover weight.
+    for (i, j), table in getattr(qubo, "extra_pairwise", {}).items():
+        assert i < j, "pair keys are expected to be ordered"
+        shape = [1] * S
+        shape[i] = T
+        shape[j] = T
+        cost += np.asarray(table).reshape(shape)
 
     return cost
 

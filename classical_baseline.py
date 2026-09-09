@@ -135,6 +135,74 @@ def simulated_annealing(qubo, seed: int = 0, n_steps: int = 20_000,
                         extra={"steps": n_steps})
 
 
+def exact_milp(qubo, time_limit: float = 60.0, mip_rel_gap: float = 0.0) -> SolverResult:
+    """Solve a one-hot QUBO exactly (or with a certified gap) via MILP.
+
+    Each nonzero cross-block product gets a binary auxiliary ``y_ij`` and the
+    standard McCormick constraints.  Products inside a one-hot block are
+    identically zero and are omitted.  This is intended as the strong
+    classical oracle for direct spatiotemporal instances that are beyond
+    brute force but still moderate enough for an exact solver.
+    """
+    from scipy.optimize import Bounds, LinearConstraint, milp
+    from scipy.sparse import coo_matrix
+
+    t0 = time.perf_counter()
+    n = qubo.n_vars
+    sym = np.asarray(qubo.Q, dtype=float) + np.asarray(qubo.Q, dtype=float).T
+    np.fill_diagonal(sym, 0.0)
+    pairs = [(i, j, float(sym[i, j])) for i in range(n) for j in range(i + 1, n)
+             if i // qubo.n_tilts != j // qubo.n_tilts and abs(sym[i, j]) > 1e-14]
+    n_all = n + len(pairs)
+
+    c = np.zeros(n_all, dtype=float)
+    c[:n] = np.diag(qubo.Q)
+    for p, (_, _, coeff) in enumerate(pairs):
+        c[n + p] = coeff
+
+    rows, cols, data, lower, upper = [], [], [], [], []
+
+    def add(coeffs, lo, hi):
+        row = len(lower)
+        for col, value in coeffs:
+            rows.append(row)
+            cols.append(col)
+            data.append(value)
+        lower.append(lo)
+        upper.append(hi)
+
+    for b in range(qubo.n_sectors):
+        add([(b * qubo.n_tilts + k, 1.0) for k in range(qubo.n_tilts)], 1.0, 1.0)
+    for p, (i, j, _) in enumerate(pairs):
+        y = n + p
+        add([(y, 1.0), (i, -1.0)], -np.inf, 0.0)       # y <= x_i
+        add([(y, 1.0), (j, -1.0)], -np.inf, 0.0)       # y <= x_j
+        add([(i, 1.0), (j, 1.0), (y, -1.0)], -np.inf, 1.0)  # y >= xi+xj-1
+
+    A = coo_matrix((data, (rows, cols)), shape=(len(lower), n_all)).tocsr()
+    options = {"time_limit": float(time_limit), "mip_rel_gap": float(mip_rel_gap)}
+    res = milp(c, integrality=np.ones(n_all), bounds=Bounds(0.0, 1.0),
+               constraints=LinearConstraint(A, lower, upper), options=options)
+    if res.x is None:
+        raise RuntimeError(f"MILP failed without an incumbent: {res.message}")
+
+    bits = np.rint(res.x[:n]).astype(int)
+    if not qubo.is_valid(bits):
+        raise RuntimeError("MILP returned a configuration violating one-hot constraints")
+    cfg = qubo.decode(bits)
+    objective = qubo.objective_from_config(cfg)
+    return SolverResult(
+        "MILP (exact)" if bool(res.success) else "MILP (best-known)",
+        cfg, objective, time.perf_counter() - t0, 0,
+        extra={"status": int(res.status), "message": str(res.message),
+               "success": bool(res.success), "mip_gap": float(getattr(res, "mip_gap", np.nan)),
+               "mip_node_count": int(getattr(res, "mip_node_count", 0) or 0),
+               "dual_bound_without_offset": float(getattr(res, "mip_dual_bound", np.nan)),
+               "binary_variables": n_all, "product_auxiliaries": len(pairs),
+               "time_limit_seconds": float(time_limit)},
+    )
+
+
 def uniform_baseline(qubo, tilt_index: int) -> SolverResult:
     """Every sector at the same tilt -- the 'do nothing clever' reference,
     which is how many networks are actually configured."""

@@ -53,6 +53,16 @@ class TiltQUBO:
     cov_norm: np.ndarray          # normalized coverage table (n_sectors, n_tilts)
     int_norm: dict                # normalized interference tables, keyed by (i, j)
     ho_norm: dict                 # normalized handover-risk tables, keyed by (i, j)
+    # Optional already-weighted pair tables used by formulations that have
+    # interactions beyond the snapshot coverage/interference/handover split
+    # (for example temporal switching edges).  Keeping them explicit avoids
+    # hiding temporal coefficients inside one of the RF weights.
+    extra_pairwise: dict = None
+    objective_offset: float = 0.0
+
+    def __post_init__(self):
+        if self.extra_pairwise is None:
+            self.extra_pairwise = {}
 
     # -- variable indexing -------------------------------------------------
 
@@ -100,7 +110,10 @@ class TiltQUBO:
                   for (i, j), table in self.int_norm.items())
         ho = sum(table[tilt_indices[i], tilt_indices[j]]
                  for (i, j), table in self.ho_norm.items())
-        return float(-self.w_cov * cov + self.w_int * isr + self.w_ho * ho)
+        extra = sum(table[tilt_indices[i], tilt_indices[j]]
+                    for (i, j), table in self.extra_pairwise.items())
+        return float(self.objective_offset - self.w_cov * cov
+                     + self.w_int * isr + self.w_ho * ho + extra)
 
     def energy(self, x) -> float:
         """Full QUBO energy of a bit vector, including the penalty term."""
