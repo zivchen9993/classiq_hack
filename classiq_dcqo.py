@@ -10,10 +10,9 @@ This is separate from the ``T**S`` NumPy reference in :mod:`dcqo`: that
 reference is useful for validation but is not a scalable circuit execution.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 import json
+from itertools import product
 from pathlib import Path
 import time
 
@@ -185,6 +184,75 @@ def scheduled_step_terms(operators, n_steps: int, time_scale: float,
     return out
 
 
+_PAULI_MATRIX = {
+    "X": np.array([[0, 1], [1, 0]], dtype=complex),
+    "Y": np.array([[0, -1j], [1j, 0]], dtype=complex),
+    "Z": np.array([[1, 0], [0, -1]], dtype=complex),
+}
+
+
+def _apply_sparse_pauli(state, paulis):
+    out = state
+    for qubit, name in paulis:
+        out = np.moveaxis(out, qubit, 0)
+        shape = out.shape
+        out = (_PAULI_MATRIX[name] @ out.reshape(2, -1)).reshape(shape)
+        out = np.moveaxis(out, 0, qubit)
+    return out
+
+
+def local_trotter_reference(qubo, steps, repetitions=1, order=1,
+                            exact_objective=None):
+    """Independent full-qubit simulation of the emitted first-order formula.
+
+    This intentionally uses ``2**n`` amplitudes and is therefore validation
+    code for tiny circuits only. It does not share the reduced DCQO evolution
+    implementation and follows the Pauli-term order sent to Classiq.
+    """
+    if qubo.n_vars > 20:
+        raise ValueError("full-qubit validation is limited to 20 qubits")
+    shape = (2,) * qubo.n_vars
+    state = np.zeros(shape, dtype=complex)
+    amplitude = 1.0 / np.sqrt(qubo.n_tilts ** qubo.n_sectors)
+    for cfg in product(range(qubo.n_tilts), repeat=qubo.n_sectors):
+        bits = qubo.encode(cfg)
+        state[tuple(bits)] = amplitude
+
+    repetitions = int(repetitions)
+    if order not in (1, 2):
+        raise ValueError("local validation supports Trotter order 1 or 2")
+
+    def apply_terms(current, terms, scale):
+        for coefficient, paulis in terms:
+            angle = scale * coefficient
+            current = (np.cos(angle) * current
+                       - 1j * np.sin(angle) * _apply_sparse_pauli(current, paulis))
+        return current
+
+    for step in steps:
+        for _ in range(repetitions):
+            scale = step["dt"] / repetitions
+            if order == 1:
+                state = apply_terms(state, step["terms"], scale)
+            else:
+                state = apply_terms(state, step["terms"], 0.5 * scale)
+                state = apply_terms(state, reversed(step["terms"]), 0.5 * scale)
+
+    probs = np.abs(state) ** 2
+    probs /= probs.sum()
+    feasible = mean = p_opt = 0.0
+    for cfg in product(range(qubo.n_tilts), repeat=qubo.n_sectors):
+        probability = float(probs[tuple(qubo.encode(cfg))])
+        objective = qubo.objective_from_config(cfg)
+        feasible += probability
+        mean += probability * objective
+        if exact_objective is not None and np.isclose(objective, exact_objective, atol=1e-9):
+            p_opt += probability
+    return {"statevector": state, "feasible_probability": feasible,
+            "expected_objective": mean,
+            "probability_of_optimum": (p_opt if exact_objective is not None else None)}
+
+
 def _to_classiq_operator(terms):
     from classiq import Pauli
 
@@ -199,14 +267,22 @@ def _to_classiq_operator(terms):
     return total
 
 
+def _to_classiq_pauli_array(paulis, n_qubits):
+    from classiq import Pauli
+
+    lookup = dict(paulis)
+    return [getattr(Pauli, lookup.get(q, "I")) for q in range(n_qubits)]
+
+
 def build_classiq_dcqo_model(qubo, *, n_steps=20, time_scale=80.0, mode="full",
                              trotter_order=1, trotter_repetitions=1,
                              topology="ring", unary_bias=None, cd_probes=6,
-                             cd_scale=1.0, seed=0):
+                             cd_scale=1.0, seed=0,
+                             decomposition="suzuki_trotter"):
     """Return a static Classiq Qmod entry point and complete model metadata."""
     try:
         from classiq import Output, QArray, QBit, allocate, prepare_dicke_state
-        from classiq import qfunc, suzuki_trotter
+        from classiq import qfunc, single_pauli_exponent, suzuki_trotter
     except ImportError as exc:
         raise RuntimeError("Classiq is not installed; install requirements.txt and authenticate") from exc
 
@@ -216,31 +292,48 @@ def build_classiq_dcqo_model(qubo, *, n_steps=20, time_scale=80.0, mode="full",
     steps = scheduled_step_terms(operators, n_steps, time_scale, mode)
     classiq_steps = [(_to_classiq_operator(step["terms"]), step["dt"]) for step in steps]
     n, T, blocks = qubo.n_vars, qubo.n_tilts, qubo.n_sectors
+    if decomposition not in ("suzuki_trotter", "sequential_pauli"):
+        raise ValueError("decomposition must be suzuki_trotter or sequential_pauli")
+    if decomposition == "sequential_pauli" and trotter_order != 1:
+        raise ValueError("sequential_pauli validation currently supports order=1 only")
+    sequential_steps = [[(_to_classiq_pauli_array(paulis, n), float(coefficient),
+                          float(step["dt"])) for coefficient, paulis in step["terms"]]
+                        for step in steps]
 
     @qfunc
     def main(v: Output[QArray[QBit, n]]):
         allocate(n, v)
         for block in range(blocks):
             prepare_dicke_state(1, v[block * T:(block + 1) * T])
-        for hamiltonian, dt in classiq_steps:
-            suzuki_trotter(hamiltonian, evolution_coefficient=dt,
-                           order=trotter_order, repetitions=trotter_repetitions,
-                           qbv=v)
+        if decomposition == "suzuki_trotter":
+            for hamiltonian, dt in classiq_steps:
+                suzuki_trotter(hamiltonian, evolution_coefficient=dt,
+                               order=trotter_order, repetitions=trotter_repetitions,
+                               qbv=v)
+        else:
+            for step_terms in sequential_steps:
+                for _ in range(trotter_repetitions):
+                    for pauli_array, coefficient, dt in step_terms:
+                        single_pauli_exponent(
+                            pauli_array,
+                            dt * coefficient / trotter_repetitions,
+                            v,
+                        )
 
     metadata = {
         "n_steps": n_steps, "time_scale": time_scale, "mode": mode,
         "trotter_order": trotter_order,
         "trotter_repetitions": trotter_repetitions, "topology": topology,
+        "decomposition": decomposition,
         "cd_probes": cd_probes, "cd_scale": cd_scale,
         "pauli_counts": operators["counts"],
         "schedule": [{k: v for k, v in step.items() if k != "terms"}
                      for step in steps],
         "step_pauli_counts": [len(step["terms"]) for step in steps],
-        "alpha": {"numerator": operators["coefficient"].numerator.tolist(),
-                  "denominator": operators["coefficient"].denominator.tolist(),
-                  "scale": operators["coefficient"].scale,
-                  "n_probes": operators["coefficient"].n_probes},
+        "alpha": {name: float(getattr(operators["coefficient"], name))
+                  for name in ("a", "b", "c", "d", "e", "scale")},
     }
+    metadata["alpha"]["n_probes"] = operators["coefficient"].n_probes
     return main, metadata
 
 
@@ -293,7 +386,8 @@ def run_classiq_dcqo(qubo, *, n_steps=20, n_shots=1000, time_scale=80.0,
                       mode="full", trotter_order=1, trotter_repetitions=1,
                       topology="ring", unary_bias=None, cd_probes=6,
                       cd_scale=1.0, seed=0, backend="simulator",
-                      exact_objective=None, artifact_dir=None):
+                      exact_objective=None, artifact_dir=None,
+                      decomposition="suzuki_trotter"):
     """Synthesize and execute one DCQO schedule on Classiq."""
     try:
         from classiq import get_transpiled_circuit_metrics, synthesize
@@ -306,7 +400,7 @@ def run_classiq_dcqo(qubo, *, n_steps=20, n_shots=1000, time_scale=80.0,
         qubo, n_steps=n_steps, time_scale=time_scale, mode=mode,
         trotter_order=trotter_order, trotter_repetitions=trotter_repetitions,
         topology=topology, unary_bias=unary_bias, cd_probes=cd_probes,
-        cd_scale=cd_scale, seed=seed)
+        cd_scale=cd_scale, seed=seed, decomposition=decomposition)
     synthesis_start = time.perf_counter()
     qprog = synthesize(main)
     synthesis_seconds = time.perf_counter() - synthesis_start
@@ -323,7 +417,12 @@ def run_classiq_dcqo(qubo, *, n_steps=20, n_shots=1000, time_scale=80.0,
     if artifact_dir is not None:
         out = Path(artifact_dir)
         out.mkdir(parents=True, exist_ok=True)
-        program_text = qprog if isinstance(qprog, str) else json.dumps(qprog, default=str)
+        if isinstance(qprog, str):
+            program_text = qprog
+        elif hasattr(qprog, "model_dump_json"):
+            program_text = qprog.model_dump_json(indent=2)
+        else:
+            program_text = json.dumps(qprog, default=str)
         (out / "classiq_program.json").write_text(program_text, encoding="utf-8")
         (out / "classiq_metadata.json").write_text(
             json.dumps(metadata, indent=2, default=str) + "\n", encoding="utf-8")
@@ -370,6 +469,8 @@ def run_classiq_bf_dcqo(qubo, *, n_iters=3, n_steps=20, total_shots=1000,
     best.prob_of_optimum = max(r.prob_of_optimum for r in results)
     best.extra.update({"n_iters": n_iters, "shots_per_iteration": shots,
                        "total_shots": shots * n_iters, "resynthesis_count": n_iters,
+                       "total_synthesis_seconds": sum(
+                           r.extra.get("synthesis_seconds", 0.0) for r in results),
                        "history": [{"objective": r.objective,
                                     "prob_of_optimum": r.prob_of_optimum,
                                     "mean_sampled_objective": r.mean_sampled_objective,

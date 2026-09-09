@@ -4,6 +4,38 @@ Updated as work proceeds, so a interrupted run can be resumed without
 re-deriving context. See `background/implementation_details.md` for the
 working conventions this file exists to satisfy.
 
+## 2026-09-09 continuation checkpoint
+
+The continuation brief is now being implemented with the temporal problem as
+the primary target. New work is intentionally not folded into the older
+snapshot headline tables until a canonical Classiq rerun exists.
+
+- `result_schema.py` defines the canonical provenance and solver-resource
+  schema. Unlike resources are stored in separate fields.
+- `background/AUDIT_2026_09_09.md` freezes contradictions in the old docs,
+  terminal transcripts and hardcoded figures. Old outputs are historical.
+- `direct_temporal.py` implements the unreduced `x[t,s,k]` QUBO with spatial
+  and temporal edges. Exhaustive tests verify direct objective = QUBO = Ising
+  = reduced-subspace energy.
+- `classical_baseline.exact_milp` supplies an exact/bounded MILP oracle using a
+  verified product linearization.
+- `classiq_dcqo.py` programmatically derives the constrained XY driver and
+  first-order `i[H_d,H_f]` Pauli strings, including three-body strings, and
+  builds DCQO/BF-DCQO Suzuki-Trotter circuits. Its Pauli Hamiltonians match the
+  independent NumPy operators on tiny cases. Actual Classiq synthesis and
+  execution remain pending because Classiq is not installed/authenticated in
+  the current environment.
+- `direct_temporal_benchmark.py` checkpoints every solver into the canonical
+  schema. The corrected tiny run is
+  `results/2026_09_09__06_23_54_utc/direct_temporal_results.json`.
+- Current suite: 46 tests passing. The original pre-change run (30 passing) is
+  saved as `results/baseline_2026_09_09/pytest_before.xml`.
+
+The corrected 27-qubit run is a correctness tier only. QAOA-XY, DCQO and
+BF-DCQO sampled the exact MILP trajectory; a matched five-step no-CD anneal did
+not. Strong classical heuristics also reached the exact answer in milliseconds,
+so this is not evidence of quantum advantage.
+
 ---
 
 ## Where things stand

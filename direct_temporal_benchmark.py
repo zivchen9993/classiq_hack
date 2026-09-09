@@ -34,7 +34,7 @@ def _stamp():
 
 def _method_from_solver(name, family, result, problem, best, *, shots=0,
                         quantum_executions=0, train_circuits=0, algorithm=None,
-                        circuit=None):
+                        circuit=None, synthesis_seconds=0.0, resynthesis_count=0):
     trajectory = problem.reshape(result.config)
     return method_record(
         name, family, result.objective, best_known_objective=best,
@@ -44,6 +44,8 @@ def _method_from_solver(name, family, result, problem, best, *, shots=0,
         parameter_search_circuit_executions=train_circuits,
         final_sampling_shots=shots, quantum_executions=quantum_executions,
         wall_time_seconds=result.seconds, circuit=circuit,
+        synthesis_time_seconds=synthesis_seconds,
+        resynthesis_count=resynthesis_count,
         algorithm={**(algorithm or {}), "raw_extra": getattr(result, "extra", {})},
     )
 
@@ -51,7 +53,8 @@ def _method_from_solver(name, family, result, problem, best, *, shots=0,
 def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
         speed_frac=0.8, lam=0.07, cost_mode="switches", shots=600, qaoa_depth=1,
         qaoa_maxiter=40, dcqo_steps=8, bf_iters=3, sa_steps=5000,
-        milp_time_limit=60.0, run_quantum=True, out_root="results"):
+        milp_time_limit=60.0, run_quantum=True, execute_classiq=False,
+        classiq_backend="simulator", out_root="results"):
     levels = np.linspace(0.0, 10.0, n_tilts).tolist()
     net = make_network(n_towers, tilt_levels_deg=levels, seed=seed)
     mobility = make_commuter_mobility(net, n_steps=horizon, seed=mobility_seed,
@@ -74,11 +77,15 @@ def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
               "qaoa_maxiter": qaoa_maxiter, "dcqo_steps": dcqo_steps,
               "bf_iters": bf_iters, "sa_steps": sa_steps,
               "milp_time_limit_seconds": milp_time_limit,
-              "local_quantum_simulation": bool(run_quantum)}
+              "local_quantum_simulation": bool(run_quantum),
+              "classiq_execution": bool(execute_classiq),
+              "classiq_backend": classiq_backend}
     record = new_run_record(
         "tiny-correctness" if instance["feasible_trajectories"] <= 2_000_000
         else "intermediate-comparison",
-        instance, config, backend="local-numpy-feasible-subspace",
+        instance, config,
+        backend=(f"local-numpy-feasible-subspace+classiq-{classiq_backend}"
+                 if execute_classiq else "local-numpy-feasible-subspace"),
         seeds={"network": seed, "mobility": mobility_seed, "qaoa": 101,
                "dcqo": 102, "bf_dcqo": 103, "greedy": 104,
                "simulated_annealing": 105})
@@ -158,6 +165,8 @@ def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
             checkpoint(_method_from_solver(
                 label, "quantum-reference", result, problem, best, shots=shots,
                 quantum_executions=1,
+                synthesis_seconds=result.extra["synthesis_seconds"],
+                resynthesis_count=1,
                 circuit={"width": qubo.n_vars, "depth": dcqo_steps,
                          "gate_count": None, "two_qubit_gates": None,
                          "three_qubit_gates": None, "pauli_terms": None},
@@ -186,6 +195,73 @@ def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
                        "trotter_order": 2, "cd_probes": 4,
                        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable"}))
 
+    if execute_classiq:
+        print("\nGate-level Classiq execution")
+        from classiq_dcqo import run_classiq_bf_dcqo, run_classiq_dcqo
+        from quantum_solve import run_classiq_qaoa
+
+        # The constrained circuit does not need a one-hot penalty. Removing it
+        # reduces Pauli terms without changing a single feasible energy.
+        circuit_qubo = build_direct_temporal_qubo(problem, penalty_scale=0.0)
+        classiq_root = out_dir / "classiq"
+        classiq_qaoa = run_classiq_qaoa(
+            circuit_qubo, p=qaoa_depth, mixer="xy", n_shots=shots,
+            maxiter=qaoa_maxiter, seed=101, backend=classiq_backend,
+            exact_objective=best)
+        checkpoint(_method_from_solver(
+            "Classiq QAOA-XY", "quantum-classiq", classiq_qaoa, problem, best,
+            shots=shots, quantum_executions=classiq_qaoa.evaluations + 1,
+            train_circuits=classiq_qaoa.evaluations,
+            circuit={"width": classiq_qaoa.n_qubits,
+                     "depth": classiq_qaoa.circuit_depth,
+                     "gate_count": classiq_qaoa.gate_count,
+                     "two_qubit_gates": None, "three_qubit_gates": None,
+                     "pauli_terms": None},
+            algorithm={"optimizer": "COBYLA", "backend": classiq_backend}))
+
+        for label, mode, artifact_name in (
+                ("Classiq annealing (no CD)", "no_cd", "annealing_no_cd"),
+                ("Classiq DCQO", "full", "dcqo")):
+            result = run_classiq_dcqo(
+                circuit_qubo, n_steps=dcqo_steps, n_shots=shots,
+                time_scale=40.0, mode=mode, trotter_order=1,
+                trotter_repetitions=1, cd_probes=4, seed=102,
+                backend=classiq_backend, exact_objective=best,
+                artifact_dir=classiq_root / artifact_name)
+            checkpoint(_method_from_solver(
+                label, "quantum-classiq", result, problem, best, shots=shots,
+                quantum_executions=1,
+                circuit={"width": result.n_qubits, "depth": result.circuit_depth,
+                         "gate_count": result.gate_count,
+                         "two_qubit_gates": result.extra.get("gate_counts", {}).get("cx"),
+                         "three_qubit_gates": None,
+                         "pauli_terms": result.extra["pauli_counts"]},
+                algorithm={"mode": mode, "backend": classiq_backend,
+                           "steps": dcqo_steps, "time_scale": 40.0,
+                           "trotter_order": 1, "trotter_repetitions": 1,
+                           "synthesis_seconds": result.extra["synthesis_seconds"]}))
+
+        classiq_bf = run_classiq_bf_dcqo(
+            circuit_qubo, n_iters=bf_iters, n_steps=dcqo_steps,
+            total_shots=shots, time_scale=40.0, trotter_order=1,
+            trotter_repetitions=1, cd_probes=4, seed=103,
+            backend=classiq_backend, exact_objective=best,
+            artifact_dir=classiq_root / "bf_dcqo")
+        checkpoint(_method_from_solver(
+            "Classiq BF-DCQO", "quantum-classiq", classiq_bf, problem, best,
+            shots=classiq_bf.extra["total_shots"], quantum_executions=bf_iters,
+            synthesis_seconds=classiq_bf.extra["total_synthesis_seconds"],
+            resynthesis_count=classiq_bf.extra["resynthesis_count"],
+            circuit={"width": classiq_bf.n_qubits,
+                     "depth": classiq_bf.circuit_depth,
+                     "gate_count": classiq_bf.gate_count,
+                     "two_qubit_gates": classiq_bf.extra.get("gate_counts", {}).get("cx"),
+                     "three_qubit_gates": None,
+                     "pauli_terms": classiq_bf.extra["pauli_counts"]},
+            algorithm={"backend": classiq_backend, "steps": dcqo_steps,
+                       "bf_iterations": bf_iters, "bias_source": "marginals",
+                       "resynthesis_count": classiq_bf.extra["resynthesis_count"]}))
+
     record["run"]["completed_timestamp_utc"] = datetime.now(timezone.utc).isoformat()
     record["run"]["status"] = "complete"
     checkpoint()
@@ -196,6 +272,9 @@ def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--classical-only", action="store_true")
+    parser.add_argument("--classiq", action="store_true",
+                        help="also synthesize and execute gate-level Classiq methods")
+    parser.add_argument("--classiq-backend", default="simulator")
     parser.add_argument("--n-towers", type=int, default=1)
     parser.add_argument("--horizon", type=int, default=3)
     parser.add_argument("--n-tilts", type=int, default=3)
@@ -218,7 +297,8 @@ def main():
         qaoa_maxiter=args.qaoa_maxiter, dcqo_steps=args.dcqo_steps,
         bf_iters=args.bf_iters, sa_steps=args.sa_steps,
         milp_time_limit=args.milp_time_limit,
-        run_quantum=not args.classical_only, out_root=args.out_root)
+        run_quantum=not args.classical_only, execute_classiq=args.classiq,
+        classiq_backend=args.classiq_backend, out_root=args.out_root)
 
 
 if __name__ == "__main__":
