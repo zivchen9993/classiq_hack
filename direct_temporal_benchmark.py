@@ -48,13 +48,14 @@ def _method_from_solver(name, family, result, problem, best, *, shots=0,
     )
 
 
-def run(*, n_towers=1, horizon=2, n_tilts=3, seed=17, mobility_seed=4,
-        lam=0.07, cost_mode="switches", shots=600, qaoa_depth=1,
+def run(*, n_towers=1, horizon=3, n_tilts=3, seed=0, mobility_seed=0,
+        speed_frac=0.8, lam=0.07, cost_mode="switches", shots=600, qaoa_depth=1,
         qaoa_maxiter=40, dcqo_steps=8, bf_iters=3, sa_steps=5000,
         milp_time_limit=60.0, run_quantum=True, out_root="results"):
     levels = np.linspace(0.0, 10.0, n_tilts).tolist()
     net = make_network(n_towers, tilt_levels_deg=levels, seed=seed)
-    mobility = make_commuter_mobility(net, n_steps=horizon, seed=mobility_seed)
+    mobility = make_commuter_mobility(net, n_steps=horizon, seed=mobility_seed,
+                                      speed_frac=speed_frac)
     snapshots = evolve_network(net, mobility, n_steps=horizon)
     problem = build_direct_temporal_problem(snapshots, lam=lam, cost_mode=cost_mode)
     qubo = build_direct_temporal_qubo(problem)
@@ -67,7 +68,7 @@ def run(*, n_towers=1, horizon=2, n_tilts=3, seed=17, mobility_seed=4,
         "spatial_interaction_pairs": len(qubo.int_norm) + len(qubo.ho_norm),
         "temporal_interaction_pairs": len(qubo.extra_pairwise),
         "tilt_levels_deg": levels, "switching_weight": lam,
-        "switching_mode": cost_mode,
+        "switching_mode": cost_mode, "traffic_speed_fraction": speed_frac,
     }
     config = {"shots_per_quantum_method": shots, "qaoa_depth": qaoa_depth,
               "qaoa_maxiter": qaoa_maxiter, "dcqo_steps": dcqo_steps,
@@ -186,6 +187,7 @@ def run(*, n_towers=1, horizon=2, n_tilts=3, seed=17, mobility_seed=4,
                        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable"}))
 
     record["run"]["completed_timestamp_utc"] = datetime.now(timezone.utc).isoformat()
+    record["run"]["status"] = "complete"
     checkpoint()
     print(f"\nSaved canonical record: {result_path}")
     return record, result_path
@@ -195,8 +197,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--classical-only", action="store_true")
     parser.add_argument("--n-towers", type=int, default=1)
-    parser.add_argument("--horizon", type=int, default=2)
+    parser.add_argument("--horizon", type=int, default=3)
     parser.add_argument("--n-tilts", type=int, default=3)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--mobility-seed", type=int, default=0)
+    parser.add_argument("--speed-frac", type=float, default=0.8)
     parser.add_argument("--shots", type=int, default=600)
     parser.add_argument("--qaoa-depth", type=int, default=1)
     parser.add_argument("--qaoa-maxiter", type=int, default=40)
@@ -207,6 +212,8 @@ def main():
     parser.add_argument("--out-root", default="results")
     args = parser.parse_args()
     run(n_towers=args.n_towers, horizon=args.horizon, n_tilts=args.n_tilts,
+        seed=args.seed, mobility_seed=args.mobility_seed,
+        speed_frac=args.speed_frac,
         shots=args.shots, qaoa_depth=args.qaoa_depth,
         qaoa_maxiter=args.qaoa_maxiter, dcqo_steps=args.dcqo_steps,
         bf_iters=args.bf_iters, sa_steps=args.sa_steps,

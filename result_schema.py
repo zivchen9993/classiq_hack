@@ -61,7 +61,7 @@ def new_run_record(kind: str, instance: dict, config: dict,
     return {
         "schema": {"name": SCHEMA_NAME, "version": SCHEMA_VERSION},
         "run": {"kind": str(kind), "provenance": collect_provenance(backend, seeds),
-                "config": dict(config)},
+                "config": dict(config), "status": "in_progress"},
         "instance": dict(instance),
         "methods": [],
         "artifacts": [],
