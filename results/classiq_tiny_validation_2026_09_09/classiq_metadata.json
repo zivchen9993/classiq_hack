@@ -1,0 +1,51 @@
+{
+  "n_steps": 1,
+  "time_scale": 2,
+  "mode": "full",
+  "trotter_order": 1,
+  "trotter_repetitions": 1,
+  "topology": "ring",
+  "cd_probes": 2,
+  "cd_scale": 1.0,
+  "pauli_counts": {
+    "initial": 12,
+    "final": 42,
+    "cd": 84,
+    "cd_by_weight": {
+      "1": 0,
+      "2": 12,
+      "3": 72,
+      "4": 0
+    }
+  },
+  "schedule": [
+    {
+      "s": 0.5,
+      "lambda": 0.4999999999999998,
+      "lambda_dot": 8.371616814144174,
+      "dt": 0.2947341182773164
+    }
+  ],
+  "step_pauli_counts": [
+    138
+  ],
+  "alpha": {
+    "a": 216.6468480253597,
+    "b": 253.91753284735125,
+    "c": 269.5744822063957,
+    "d": 61.384301959731786,
+    "e": 634.6436528532669,
+    "scale": 1.0,
+    "n_probes": 2
+  },
+  "gate_counts": {
+    "cx": 315,
+    "rz": 126,
+    "ry": 12,
+    "u2": 12,
+    "h": 10,
+    "x": 6,
+    "sxdg": 6,
+    "sx": 2
+  }
+}
