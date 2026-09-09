@@ -1,0 +1,19 @@
+TiltQUBO: 6 sectors x 3 tilts = 18 qubits | 171 non-zero QUBO entries | penalty=2.40 w_cov=0.4 w_int=0.35 w_ho=0.25
+brute-force optimum: -1.61524 tilts=[2, 2, 2, 1, 1, 1]
+uniform-random reference: P(optimum) = 1/729 = 0.14%
+
+--- XY ansatz on Classiq ---
+  synthesizing XY ansatz: 18 qubits, p=2 ...
+  synthesized: circuit depth 454, 1200 gates
+  optimizing 4 parameters, <= 30 circuit executions ...
+  Classiq QAOA-XY (p=2)      obj=-1.61524  18q p=2  P(opt)= 0.70%  feasible=100.0%  167.3s
+  gap to optimum: +0.00000
+  tilts: [2, 2, 2, 1, 1, 1]
+
+--- X ansatz on Classiq ---
+  synthesizing X ansatz: 18 qubits, p=2 ...
+  synthesized: circuit depth 472, 1008 gates
+  optimizing 4 parameters, <= 30 circuit executions ...
+  Classiq QAOA-X (p=2)       obj=-1.49443  18q p=2  P(opt)= 0.00%  feasible= 22.0%  156.3s
+  gap to optimum: +0.12081
+  tilts: [2, 2, 2, 1, 1, 0]
