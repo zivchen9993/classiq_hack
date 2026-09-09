@@ -1,0 +1,141 @@
+{
+  "analysis": "fixed-vs-dynamic-serving-cell sensitivity",
+  "timestamp_utc": "2026-09-09T07:16:09.615866+00:00",
+  "source_result": "results/2026_09_09__07_05_41_utc/direct_temporal_results.json",
+  "instance": {
+    "H": 3,
+    "S": 3,
+    "T": 3,
+    "feasible_trajectories": 19683,
+    "formulation": "direct-spatiotemporal-one-hot",
+    "n_towers": 1,
+    "qubits": 27,
+    "spatial_interaction_pairs": 18,
+    "switching_mode": "switches",
+    "switching_weight": 0.07,
+    "temporal_interaction_pairs": 6,
+    "tilt_levels_deg": [
+      0.0,
+      5.0,
+      10.0
+    ],
+    "traffic_speed_fraction": 0.8
+  },
+  "method": "enumerate all T^S snapshot tilt configurations; dynamic association uses strongest chosen-tilt received power",
+  "caveat": "dynamic association comparison does not redefine handover edge sets/targets; it isolates serving-cell assignment sensitivity",
+  "timesteps": [
+    {
+      "timestep": 0,
+      "n_configurations": 27,
+      "spearman_fixed_vs_dynamic_mean_sinr": 0.9975579975579975,
+      "spearman_fixed_vs_dynamic_spectral_efficiency": 0.9975579975579975,
+      "spearman_surrogate_cost_vs_negative_dynamic_spectral_efficiency": 0.8974358974358974,
+      "surrogate_optimum_config": [
+        1,
+        0,
+        1
+      ],
+      "dynamic_spectral_efficiency_optimum_config": [
+        1,
+        0,
+        0
+      ],
+      "same_selected_config": false,
+      "surrogate_optimum": {
+        "surrogate_cost": -1.516258536800212,
+        "fixed_mean_sinr_db": 12.397593614839236,
+        "dynamic_mean_sinr_db": 12.332498090701167,
+        "fixed_mean_spectral_efficiency": 4.254926222521242,
+        "dynamic_mean_spectral_efficiency": 4.238069332184385,
+        "server_change_pct_vs_reference": 0.22475377896993706
+      },
+      "dynamic_kpi_optimum": {
+        "surrogate_cost": -1.2743304192864717,
+        "dynamic_mean_sinr_db": 12.48521601273938,
+        "dynamic_mean_spectral_efficiency": 4.2482778302659705,
+        "server_change_pct_vs_reference": 0.45295261019606403
+      },
+      "server_change_pct_range": [
+        0.0,
+        3.611327487950733
+      ]
+    },
+    {
+      "timestep": 1,
+      "n_configurations": 27,
+      "spearman_fixed_vs_dynamic_mean_sinr": 0.9835164835164836,
+      "spearman_fixed_vs_dynamic_spectral_efficiency": 0.9926739926739926,
+      "spearman_surrogate_cost_vs_negative_dynamic_spectral_efficiency": 0.8021978021978021,
+      "surrogate_optimum_config": [
+        1,
+        1,
+        1
+      ],
+      "dynamic_spectral_efficiency_optimum_config": [
+        0,
+        1,
+        1
+      ],
+      "same_selected_config": false,
+      "surrogate_optimum": {
+        "surrogate_cost": -1.6895979953901132,
+        "fixed_mean_sinr_db": 12.511005703718508,
+        "dynamic_mean_sinr_db": 12.441018658499024,
+        "fixed_mean_spectral_efficiency": 4.333709277232785,
+        "dynamic_mean_spectral_efficiency": 4.316385404912619,
+        "server_change_pct_vs_reference": 0.0
+      },
+      "dynamic_kpi_optimum": {
+        "surrogate_cost": -1.3344529895824548,
+        "dynamic_mean_sinr_db": 12.620142439128454,
+        "dynamic_mean_spectral_efficiency": 4.3340030051185865,
+        "server_change_pct_vs_reference": 1.6513481808038781
+      },
+      "server_change_pct_range": [
+        0.0,
+        5.719193712265609
+      ]
+    },
+    {
+      "timestep": 2,
+      "n_configurations": 27,
+      "spearman_fixed_vs_dynamic_mean_sinr": 0.9871794871794871,
+      "spearman_fixed_vs_dynamic_spectral_efficiency": 0.9963369963369964,
+      "spearman_surrogate_cost_vs_negative_dynamic_spectral_efficiency": 0.833943833943834,
+      "surrogate_optimum_config": [
+        1,
+        1,
+        1
+      ],
+      "dynamic_spectral_efficiency_optimum_config": [
+        0,
+        0,
+        0
+      ],
+      "same_selected_config": false,
+      "surrogate_optimum": {
+        "surrogate_cost": -1.4580135305334436,
+        "fixed_mean_sinr_db": 10.757383075024132,
+        "dynamic_mean_sinr_db": 10.606675501643018,
+        "fixed_mean_spectral_efficiency": 3.8204282105837746,
+        "dynamic_mean_spectral_efficiency": 3.784302299511077,
+        "server_change_pct_vs_reference": 0.0
+      },
+      "dynamic_kpi_optimum": {
+        "surrogate_cost": -1.1533715117010757,
+        "dynamic_mean_sinr_db": 10.7713714965267,
+        "dynamic_mean_spectral_efficiency": 3.825981324677798,
+        "server_change_pct_vs_reference": 0.0
+      },
+      "server_change_pct_range": [
+        0.0,
+        8.454804958623509
+      ]
+    }
+  ],
+  "summary": {
+    "min_fixed_dynamic_sinr_rank_correlation": 0.9835164835164836,
+    "min_fixed_dynamic_spectral_efficiency_rank_correlation": 0.9926739926739926,
+    "surrogate_and_dynamic_kpi_optimum_match_fraction": 0.0
+  }
+}

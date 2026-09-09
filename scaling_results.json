@@ -1,0 +1,204 @@
+{
+  "kind": "direct-temporal-scaling",
+  "measured": [
+    {
+      "H": 1,
+      "S": 3,
+      "T": 3,
+      "qubits": 9,
+      "feasible_trajectories": 27,
+      "spatial_pairs": 6,
+      "temporal_pairs": 0,
+      "pauli_initial": 18,
+      "pauli_final": 36,
+      "pauli_cd": 126,
+      "pauli_cd_by_weight": {
+        "1": 0,
+        "2": 18,
+        "3": 108,
+        "4": 0
+      },
+      "pauli_build_seconds": 0.00569254899983207,
+      "milp_objective": -1.3056560305682057,
+      "milp_seconds": 0.005094685999893045,
+      "milp_success": true,
+      "greedy_gap": 0.0,
+      "greedy_seconds": 0.003087106000066342,
+      "sa_gap": 0.0,
+      "sa_seconds": 0.018907084000147734,
+      "quantum_reference": {
+        "QAOA-XY": {
+          "gap": -2.220446049250313e-16,
+          "p_opt": 0.14752584542439437,
+          "seconds": 0.05231163899998137
+        },
+        "DCQO": {
+          "gap": -2.220446049250313e-16,
+          "p_opt": 0.13782752343801094,
+          "seconds": 0.004162306999887733
+        },
+        "BF-DCQO": {
+          "gap": -2.220446049250313e-16,
+          "p_opt": 0.20697566680341067,
+          "seconds": 0.011723178000011103
+        }
+      }
+    },
+    {
+      "H": 2,
+      "S": 3,
+      "T": 3,
+      "qubits": 18,
+      "feasible_trajectories": 729,
+      "spatial_pairs": 12,
+      "temporal_pairs": 3,
+      "pauli_initial": 36,
+      "pauli_final": 90,
+      "pauli_cd": 324,
+      "pauli_cd_by_weight": {
+        "1": 0,
+        "2": 36,
+        "3": 288,
+        "4": 0
+      },
+      "pauli_build_seconds": 0.023142107000012402,
+      "milp_objective": -2.948020550790397,
+      "milp_seconds": 0.010484797000117396,
+      "milp_success": true,
+      "greedy_gap": 0.0,
+      "greedy_seconds": 0.007804201999988436,
+      "sa_gap": 0.0,
+      "sa_seconds": 0.022583831000019927,
+      "quantum_reference": {
+        "QAOA-XY": {
+          "gap": -1.3322676295501878e-15,
+          "p_opt": 0.1046522275606976,
+          "seconds": 0.061837317000026815
+        },
+        "DCQO": {
+          "gap": -1.3322676295501878e-15,
+          "p_opt": 0.0396687411882015,
+          "seconds": 0.009313835000057225
+        },
+        "BF-DCQO": {
+          "gap": -1.3322676295501878e-15,
+          "p_opt": 0.07925996286006769,
+          "seconds": 0.027415128000029654
+        }
+      }
+    },
+    {
+      "H": 3,
+      "S": 3,
+      "T": 3,
+      "qubits": 27,
+      "feasible_trajectories": 19683,
+      "spatial_pairs": 18,
+      "temporal_pairs": 6,
+      "pauli_initial": 54,
+      "pauli_final": 144,
+      "pauli_cd": 522,
+      "pauli_cd_by_weight": {
+        "1": 0,
+        "2": 54,
+        "3": 468,
+        "4": 0
+      },
+      "pauli_build_seconds": 0.06483347800008232,
+      "milp_objective": -4.628104071832574,
+      "milp_seconds": 0.019542453999974896,
+      "milp_success": true,
+      "greedy_gap": 0.0,
+      "greedy_seconds": 0.1127565560000221,
+      "sa_gap": 0.0,
+      "sa_seconds": 0.027096185000118567,
+      "quantum_reference": {
+        "QAOA-XY": {
+          "gap": 0.0,
+          "p_opt": 0.05085717195584651,
+          "seconds": 0.22140874300021096
+        },
+        "DCQO": {
+          "gap": 0.0,
+          "p_opt": 0.010616366218713175,
+          "seconds": 0.1438084919998346
+        },
+        "BF-DCQO": {
+          "gap": 0.0,
+          "p_opt": 0.03201513873968426,
+          "seconds": 0.5270009680000385
+        }
+      }
+    },
+    {
+      "H": 4,
+      "S": 3,
+      "T": 3,
+      "qubits": 36,
+      "feasible_trajectories": 531441,
+      "spatial_pairs": 24,
+      "temporal_pairs": 9,
+      "pauli_initial": 72,
+      "pauli_final": 198,
+      "pauli_cd": 720,
+      "pauli_cd_by_weight": {
+        "1": 0,
+        "2": 72,
+        "3": 648,
+        "4": 0
+      },
+      "pauli_build_seconds": 1.235065233000114,
+      "milp_objective": -6.32747523890497,
+      "milp_seconds": 0.018785823999905915,
+      "milp_success": true,
+      "greedy_gap": 0.0,
+      "greedy_seconds": 0.04128390899995793,
+      "sa_gap": 0.0,
+      "sa_seconds": 0.03444408299992574
+    }
+  ],
+  "classiq_measured_artifact": {
+    "status": "measured_saved_artifact",
+    "instance": {
+      "S": 3,
+      "T": 2,
+      "H": 2,
+      "qubits": 12
+    },
+    "n_steps": 3,
+    "depth": 726,
+    "gate_count": 1377,
+    "gate_counts": {
+      "cx": 897,
+      "rz": 378,
+      "u2": 36,
+      "h": 24,
+      "sxdg": 18,
+      "ry": 12,
+      "x": 6,
+      "sx": 6
+    },
+    "pauli_counts": {
+      "initial": 12,
+      "final": 42,
+      "cd": 84,
+      "cd_by_weight": {
+        "1": 0,
+        "2": 12,
+        "3": 72,
+        "4": 0
+      }
+    },
+    "program_id": "3J50w5QGnrfsTKrNJfqBY2AwtpD",
+    "p_opt": 0.4382,
+    "local_p_opt": 0.3779785032856749,
+    "expected_objective": -2.9109290170133075,
+    "local_expected_objective": -2.8904438117929216,
+    "shots": 5000
+  },
+  "notes": [
+    "Qubit and Pauli counts are measured from the exact direct QUBO/Pauli construction.",
+    "Local quantum-reference rows use the reduced feasible-subspace simulator and are not scalable circuit executions.",
+    "Classiq synthesized depth is included only where a saved Classiq artifact exists; no missing points are extrapolated as measured data."
+  ]
+}

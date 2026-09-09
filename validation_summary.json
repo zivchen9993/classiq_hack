@@ -1,0 +1,30 @@
+{
+  "instance": {
+    "S": 3,
+    "T": 2,
+    "H": 2,
+    "qubits": 12
+  },
+  "exact_objective": -3.2838891876900997,
+  "local_reference": {
+    "feasible_probability": 0.9999999999999998,
+    "expected_objective": -2.8904438117929216,
+    "probability_of_optimum": 0.3779785032856749
+  },
+  "classiq": {
+    "mean_sampled_objective": 2.0456690401058637,
+    "probability_of_optimum": 0.0,
+    "feasible_probability": 1.0,
+    "best_objective": -2.363847548972041,
+    "depth": 1093,
+    "gate_count": 2037,
+    "seconds": 57.852975319001416
+  },
+  "absolute_errors": {
+    "expected_objective": 4.936112851898786,
+    "probability_of_optimum": 0.3779785032856749
+  },
+  "shots": 5000,
+  "status": "validation",
+  "decomposition": "sequential_pauli"
+}

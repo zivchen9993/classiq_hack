@@ -1,0 +1,25 @@
+{
+  "instance": {
+    "S": 3,
+    "T": 2,
+    "H": 2,
+    "qubits": 12
+  },
+  "exact_objective": -3.2838891876900997,
+  "local_reference": {
+    "feasible_probability": 0.9999999999999998,
+    "expected_objective": -2.8904438117929216,
+    "probability_of_optimum": 0.3779785032856749
+  },
+  "classiq": {
+    "mean_sampled_objective": -2.9109290170133075,
+    "probability_of_optimum": 0.4382,
+    "feasible_probability": 1.0,
+    "best_objective": -3.2838891876900997,
+    "depth": 726,
+    "gate_count": 1377,
+    "seconds": 29.04422367100051
+  },
+  "shots": 5000,
+  "status": "validation"
+}

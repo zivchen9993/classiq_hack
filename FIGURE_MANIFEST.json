@@ -1,0 +1,28 @@
+{
+  "sources": {
+    "direct": "results/2026_09_09__07_05_41_utc/direct_temporal_results.json",
+    "multiseed_summary": "results/multiseed_2026_09_09__07_07_57_utc/multiseed_summary.json",
+    "multiseed_csv": "results/multiseed_2026_09_09__07_07_57_utc/multiseed_rows.csv",
+    "scaling": "results/scaling_2026_09_09__07_08_44_utc/scaling_results.json",
+    "classiq_root": "results/classiq_tiny_validation_2026_09_09",
+    "snapshot": "results/snapshot_validation_2026_09_09.json",
+    "assignment": "results/assignment_sensitivity_2026_09_09.json",
+    "pareto_figure": "figures/final_temporal/direct_temporal_pareto.png",
+    "out": "figures/final_temporal"
+  },
+  "figures": [
+    "figures/final_temporal/snapshot_xy_feasibility.png",
+    "figures/final_temporal/direct_moving_demand.png",
+    "figures/final_temporal/direct_trajectories.png",
+    "figures/final_temporal/direct_objective_gap.png",
+    "figures/final_temporal/direct_kpis.png",
+    "figures/final_temporal/direct_multiseed_popt.png",
+    "figures/final_temporal/direct_scaling.png",
+    "figures/final_temporal/classiq_circuit_resources.png",
+    "figures/final_temporal/classiq_validation.png",
+    "figures/final_temporal/classiq_logical_circuit.png",
+    "figures/final_temporal/assignment_sensitivity.png",
+    "figures/final_temporal/limitations_panel.png",
+    "figures/final_temporal/direct_temporal_pareto.png"
+  ]
+}

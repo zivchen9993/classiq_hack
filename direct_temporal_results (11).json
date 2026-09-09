@@ -1,0 +1,1466 @@
+{
+  "artifacts": [
+    {
+      "kind": "canonical-results",
+      "path": "results/2026_09_09__07_07_52_utc/direct_temporal_results.json"
+    }
+  ],
+  "instance": {
+    "H": 3,
+    "S": 3,
+    "T": 3,
+    "feasible_trajectories": 19683,
+    "formulation": "direct-spatiotemporal-one-hot",
+    "n_towers": 1,
+    "qubits": 27,
+    "spatial_interaction_pairs": 18,
+    "switching_mode": "switches",
+    "switching_weight": 0.07,
+    "temporal_interaction_pairs": 6,
+    "tilt_levels_deg": [
+      0.0,
+      5.0,
+      10.0
+    ],
+    "traffic_speed_fraction": 0.8
+  },
+  "methods": [
+    {
+      "algorithm": {
+        "raw_extra": {
+          "binary_variables": 144,
+          "dual_bound_without_offset": -25.614571725402442,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "mip_gap": 0.0,
+          "mip_node_count": 1,
+          "product_auxiliaries": 117,
+          "status": 0,
+          "success": true,
+          "time_limit_seconds": 30.0
+        },
+        "solver": "scipy.optimize.milp"
+      },
+      "family": "classical",
+      "name": "MILP exact/best-known",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 0,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.020054569999956584
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "search_space": 19683
+        }
+      },
+      "family": "classical",
+      "name": "brute force (exact)",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 19683,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.19332234099988455
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "policy": "best constant with hindsight"
+        }
+      },
+      "family": "classical",
+      "name": "best static trajectory",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 27,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.0
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.041846330546926325,
+        "kpis": {
+          "coverage_pct": 98.22309833947433,
+          "edge_sinr_db": 1.086620627265979,
+          "handover_failure_pct": 46.96120318687317,
+          "mean_sinr_db": 13.333453441460216,
+          "mean_spectral_efficiency": 4.570567788381939,
+          "n_switches": 0,
+          "objective": -3.9727253948555132,
+          "outage_pct": 1.7769016605256855,
+          "per_step": [
+            {
+              "coverage_pct": 97.95154240483438,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 38.418695635611996,
+              "mean_sinr_db": 12.271157069752253,
+              "mean_spectral_efficiency": 4.267885172932377,
+              "n_points": 2025,
+              "outage_pct": 2.048457595165621
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.3137468949661941,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -3.9727253948555132,
+          "switch_cost": 0.0,
+          "weighted_switch_cost": 0.0
+        },
+        "objective": -3.9727253948555132,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "policy": "independent snapshot optima"
+        }
+      },
+      "family": "classical",
+      "name": "snapshot chasing",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 81,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.0
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.009128915898512169,
+        "kpis": {
+          "coverage_pct": 98.08523852230589,
+          "edge_sinr_db": 0.8994680809883713,
+          "handover_failure_pct": 46.35976641977506,
+          "mean_sinr_db": 13.359813219323987,
+          "mean_spectral_efficiency": 4.582645173419304,
+          "n_switches": 2,
+          "objective": -4.005442809503927,
+          "outage_pct": 1.9147614776941169,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 97.81537933398194,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.56395437602214,
+              "mean_sinr_db": 13.746627894593662,
+              "mean_spectral_efficiency": 4.697460077746354,
+              "n_points": 2025,
+              "outage_pct": 2.1846206660180654
+            },
+            {
+              "coverage_pct": 98.02631140860184,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.401624368447806,
+              "mean_sinr_db": 13.981254008361445,
+              "mean_spectral_efficiency": 4.755704294838657,
+              "n_points": 2025,
+              "outage_pct": 1.973688591398156
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.3004186963949287,
+            -1.419430887595877
+          ],
+          "snapshot_total": -4.145442809503927,
+          "switch_cost": 2.0,
+          "weighted_switch_cost": 0.14
+        },
+        "objective": -4.005442809503927,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "policy": "one-step switching-aware rolling horizon"
+        }
+      },
+      "family": "classical",
+      "name": "myopic hysteresis",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 81,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.0
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.04841834977239978,
+        "kpis": {
+          "coverage_pct": 98.64202243254022,
+          "edge_sinr_db": 1.1199237496646146,
+          "handover_failure_pct": 46.66929814350914,
+          "mean_sinr_db": 13.449397851406777,
+          "mean_spectral_efficiency": 4.610939902065159,
+          "n_switches": 1,
+          "objective": -3.96615337563004,
+          "outage_pct": 1.3579775674597947,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 99.28226360032684,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 50.755545283400316,
+              "mean_sinr_db": 14.001379152868017,
+              "mean_spectral_efficiency": 4.787450240305803,
+              "n_points": 2025,
+              "outage_pct": 0.7177363996731495
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2253997094919002,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.03615337563004,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -3.96615337563004,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "restarts": 1
+        }
+      },
+      "family": "classical",
+      "name": "greedy (single start)",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 59,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.0005736379998779739
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.009128915898512169,
+        "kpis": {
+          "coverage_pct": 98.08523852230589,
+          "edge_sinr_db": 0.8994680809883713,
+          "handover_failure_pct": 46.35976641977506,
+          "mean_sinr_db": 13.359813219323987,
+          "mean_spectral_efficiency": 4.582645173419304,
+          "n_switches": 2,
+          "objective": -4.005442809503927,
+          "outage_pct": 1.9147614776941169,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 97.81537933398194,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.56395437602214,
+              "mean_sinr_db": 13.746627894593662,
+              "mean_spectral_efficiency": 4.697460077746354,
+              "n_points": 2025,
+              "outage_pct": 2.1846206660180654
+            },
+            {
+              "coverage_pct": 98.02631140860184,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.401624368447806,
+              "mean_sinr_db": 13.981254008361445,
+              "mean_spectral_efficiency": 4.755704294838657,
+              "n_points": 2025,
+              "outage_pct": 1.973688591398156
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.3004186963949287,
+            -1.419430887595877
+          ],
+          "snapshot_total": -4.145442809503927,
+          "switch_cost": 2.0,
+          "weighted_switch_cost": 0.14
+        },
+        "objective": -4.005442809503927,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "restarts": 32
+        }
+      },
+      "family": "classical",
+      "name": "greedy (32 starts)",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 1583,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.01406313899997258
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "raw_extra": {
+          "steps": 3000
+        }
+      },
+      "family": "classical",
+      "name": "simulated annealing",
+      "resources": {
+        "circuit": {
+          "depth": null,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": null
+        },
+        "classical_objective_evaluations": 2013,
+        "final_sampling_shots": 0,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 0,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.027310442000043622
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": null,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "optimizer": "COBYLA",
+        "quantile": 0.15,
+        "raw_extra": {
+          "ground_energy": -4.01457172540244,
+          "n_feasible": 19683,
+          "n_shots": 300,
+          "quantile": 0.15
+        },
+        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable"
+      },
+      "family": "quantum-reference",
+      "name": "QAOA-XY",
+      "resources": {
+        "circuit": {
+          "depth": 1,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": 27
+        },
+        "classical_objective_evaluations": 0,
+        "final_sampling_shots": 300,
+        "parameter_search_circuit_executions": 96,
+        "quantum_executions": 97,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.28620986599980824
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.009128915898513945,
+        "kpis": {
+          "coverage_pct": 98.08523852230589,
+          "edge_sinr_db": 0.8994680809883713,
+          "handover_failure_pct": 46.35976641977506,
+          "mean_sinr_db": 13.359813219323987,
+          "mean_spectral_efficiency": 4.582645173419304,
+          "n_switches": 2,
+          "objective": -4.005442809503927,
+          "outage_pct": 1.9147614776941169,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 97.81537933398194,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.56395437602214,
+              "mean_sinr_db": 13.746627894593662,
+              "mean_spectral_efficiency": 4.697460077746354,
+              "n_points": 2025,
+              "outage_pct": 2.1846206660180654
+            },
+            {
+              "coverage_pct": 98.02631140860184,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.401624368447806,
+              "mean_sinr_db": 13.981254008361445,
+              "mean_spectral_efficiency": 4.755704294838657,
+              "n_points": 2025,
+              "outage_pct": 1.973688591398156
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.3004186963949287,
+            -1.419430887595877
+          ],
+          "snapshot_total": -4.145442809503927,
+          "switch_cost": 2.0,
+          "weighted_switch_cost": 0.14
+        },
+        "objective": -4.005442809503926,
+        "probability_of_optimum": 0.0002927090280131564,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "cd_probes": 4,
+        "mode": "no_cd",
+        "raw_extra": {
+          "biased": false,
+          "cd_alpha_mid": 0.0,
+          "driver_g": 0.26789548041733635,
+          "ground_energy": -4.01457172540244,
+          "marginals": [
+            [
+              0.3773213325984399,
+              0.3651860523932501,
+              0.25749261500830994
+            ],
+            [
+              0.3751720784848726,
+              0.36611854797774224,
+              0.25870937353738516
+            ],
+            [
+              0.374072569275983,
+              0.3695856431685948,
+              0.25634178755542203
+            ],
+            [
+              0.3647953316762177,
+              0.36970545764658186,
+              0.26549921067720045
+            ],
+            [
+              0.3757782292012938,
+              0.3709223017856758,
+              0.2532994690130305
+            ],
+            [
+              0.3654249432554111,
+              0.37526916790866693,
+              0.2593058888359222
+            ],
+            [
+              0.3607949388502995,
+              0.3736221377717953,
+              0.26558292337790496
+            ],
+            [
+              0.37903143515314264,
+              0.3696603828415811,
+              0.25130818200527444
+            ],
+            [
+              0.36453901398126226,
+              0.3763835824137066,
+              0.2590774036050311
+            ]
+          ],
+          "mode": "no_cd",
+          "n_feasible": 19683,
+          "n_shots": 300,
+          "total_time": 4.147554521562611,
+          "trotter_order": 2
+        },
+        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable",
+        "steps": 8,
+        "time_scale": 40.0,
+        "trotter_order": 2
+      },
+      "family": "quantum-reference",
+      "name": "annealing (no CD)",
+      "resources": {
+        "circuit": {
+          "depth": 8,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": 27
+        },
+        "classical_objective_evaluations": 0,
+        "final_sampling_shots": 300,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 1,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.01894719200004147
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": 0.00017720765405549696,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "cd_probes": 4,
+        "mode": "full",
+        "raw_extra": {
+          "biased": false,
+          "cd_alpha_mid": -1.2825361565155924,
+          "driver_g": 0.26789548041733635,
+          "ground_energy": -4.01457172540244,
+          "marginals": [
+            [
+              0.5437653900783301,
+              0.4514121431829238,
+              0.004822466738745904
+            ],
+            [
+              0.5321475156948829,
+              0.45005665516917487,
+              0.017795829135942152
+            ],
+            [
+              0.5189022176928395,
+              0.4632442631488617,
+              0.017853519158298845
+            ],
+            [
+              0.4765674965523531,
+              0.5094889615259841,
+              0.013943541921662885
+            ],
+            [
+              0.5218986294076432,
+              0.46099627487826816,
+              0.017105095714088223
+            ],
+            [
+              0.46218701364493675,
+              0.5205972937085832,
+              0.01721569264648034
+            ],
+            [
+              0.44938543730794883,
+              0.5330564690130212,
+              0.017558093679031096
+            ],
+            [
+              0.5369668668966112,
+              0.4442191976449567,
+              0.018813935458428813
+            ],
+            [
+              0.45017104789798246,
+              0.5232515380595579,
+              0.02657741404245954
+            ]
+          ],
+          "mode": "full",
+          "n_feasible": 19683,
+          "n_shots": 300,
+          "total_time": 4.147554521562611,
+          "trotter_order": 2
+        },
+        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable",
+        "steps": 8,
+        "time_scale": 40.0,
+        "trotter_order": 2
+      },
+      "family": "quantum-reference",
+      "name": "DCQO",
+      "resources": {
+        "circuit": {
+          "depth": 8,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": 27
+        },
+        "classical_objective_evaluations": 0,
+        "final_sampling_shots": 300,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 1,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.16068452600006822
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.0,
+        "kpis": {
+          "coverage_pct": 98.37725914597415,
+          "edge_sinr_db": 1.103272188465297,
+          "handover_failure_pct": 46.85954481328758,
+          "mean_sinr_db": 13.36025366988175,
+          "mean_spectral_efficiency": 4.579529779962113,
+          "n_switches": 1,
+          "objective": -4.01457172540244,
+          "outage_pct": 1.622740854025855,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 98.48797374062868,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.32628529273564,
+              "mean_sinr_db": 13.733946608292941,
+              "mean_spectral_efficiency": 4.693219873996667,
+              "n_points": 2025,
+              "outage_pct": 1.5120262593713307
+            },
+            {
+              "coverage_pct": 98.22977887295988,
+              "edge_sinr_db": 1.086620627265979,
+              "handover_failure_pct": 51.13862863227187,
+              "mean_sinr_db": 13.995256646335456,
+              "mean_spectral_efficiency": 4.750598318216771,
+              "n_points": 2025,
+              "outage_pct": 1.7702211270401047
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.2738180592643005,
+            -1.3851604406250184
+          ],
+          "snapshot_total": -4.08457172540244,
+          "switch_cost": 1.0,
+          "weighted_switch_cost": 0.07
+        },
+        "objective": -4.01457172540244,
+        "probability_of_optimum": 0.003870791874414024,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "algorithm": {
+        "bf_iterations": 3,
+        "bias_source": "marginals",
+        "cd_probes": 4,
+        "raw_extra": {
+          "bias_source": "marginals",
+          "bias_strength": 1.0,
+          "biased": false,
+          "cd_alpha_mid": -1.285490011880952,
+          "driver_g": 0.26789548041733635,
+          "ground_energy": -4.01457172540244,
+          "history": [
+            {
+              "bias_max": 0.0,
+              "bias_strength": 1.0,
+              "iteration": 1,
+              "mean_sampled_objective": -3.275895794972472,
+              "objective": -4.005442809503926,
+              "prob_of_optimum": 0.003876585974273439,
+              "seconds": 0.2252381549999427
+            },
+            {
+              "bias_max": 0.17609477354439923,
+              "bias_strength": 1.0,
+              "iteration": 2,
+              "mean_sampled_objective": -3.605867048532974,
+              "objective": -3.979532217580536,
+              "prob_of_optimum": 0.0046528855132550164,
+              "seconds": 0.16151503900005082
+            },
+            {
+              "bias_max": 0.1783508439094644,
+              "bias_strength": 1.0,
+              "iteration": 3,
+              "mean_sampled_objective": -3.5823623218594123,
+              "objective": -3.9788421723732985,
+              "prob_of_optimum": 0.0056873198178597345,
+              "seconds": 0.1806778210000175
+            }
+          ],
+          "marginals": [
+            [
+              0.5439456808232033,
+              0.45138418925039103,
+              0.004670129926405651
+            ],
+            [
+              0.5322554843169403,
+              0.44996426818685237,
+              0.017780247496207397
+            ],
+            [
+              0.5189533112433429,
+              0.46314583342257637,
+              0.017900855334080822
+            ],
+            [
+              0.47665932797582866,
+              0.5096473934907251,
+              0.01369327853344667
+            ],
+            [
+              0.5219305904453816,
+              0.4608610188519867,
+              0.017208390702631148
+            ],
+            [
+              0.46213517057555425,
+              0.5206450552899909,
+              0.01721977413445416
+            ],
+            [
+              0.4493945428529131,
+              0.5332355537301091,
+              0.01736990341697824
+            ],
+            [
+              0.5370059334789324,
+              0.4440374132288025,
+              0.01895665329226403
+            ],
+            [
+              0.4500560096581908,
+              0.5232656083136974,
+              0.026678382028111656
+            ]
+          ],
+          "mode": "full",
+          "n_feasible": 19683,
+          "n_iters": 3,
+          "n_shots": 100,
+          "total_circuits": 3,
+          "total_shots": 300,
+          "total_time": 4.147554521562611,
+          "trotter_order": 2
+        },
+        "shots_per_iteration": 100,
+        "simulation_note": "reduced T^(S*H) NumPy statevector; not scalable",
+        "steps": 8,
+        "time_scale": 40.0,
+        "trotter_order": 2
+      },
+      "family": "quantum-reference",
+      "name": "BF-DCQO",
+      "resources": {
+        "circuit": {
+          "depth": 8,
+          "gate_count": null,
+          "pauli_terms": null,
+          "three_qubit_gates": null,
+          "two_qubit_gates": null,
+          "width": 27
+        },
+        "classical_objective_evaluations": 0,
+        "final_sampling_shots": 300,
+        "parameter_search_circuit_executions": 0,
+        "quantum_executions": 3,
+        "resynthesis_count": 0,
+        "synthesis_time_seconds": 0.0,
+        "wall_time_seconds": 0.5711348319998706
+      },
+      "solution": {
+        "feasible_fraction": 1.0,
+        "gap_to_best_known": 0.009128915898513945,
+        "kpis": {
+          "coverage_pct": 98.08523852230589,
+          "edge_sinr_db": 0.8994680809883713,
+          "handover_failure_pct": 46.35976641977506,
+          "mean_sinr_db": 13.359813219323987,
+          "mean_spectral_efficiency": 4.582645173419304,
+          "n_switches": 2,
+          "objective": -4.005442809503927,
+          "outage_pct": 1.9147614776941169,
+          "per_step": [
+            {
+              "coverage_pct": 98.41402482433388,
+              "edge_sinr_db": 1.1365753108639325,
+              "handover_failure_pct": 38.113720514855224,
+              "mean_sinr_db": 12.351557755016856,
+              "mean_spectral_efficiency": 4.294771147672901,
+              "n_points": 2025,
+              "outage_pct": 1.5859751756661298
+            },
+            {
+              "coverage_pct": 97.81537933398194,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.56395437602214,
+              "mean_sinr_db": 13.746627894593662,
+              "mean_spectral_efficiency": 4.697460077746354,
+              "n_points": 2025,
+              "outage_pct": 2.1846206660180654
+            },
+            {
+              "coverage_pct": 98.02631140860184,
+              "edge_sinr_db": 0.7809144660505906,
+              "handover_failure_pct": 50.401624368447806,
+              "mean_sinr_db": 13.981254008361445,
+              "mean_spectral_efficiency": 4.755704294838657,
+              "n_points": 2025,
+              "outage_pct": 1.973688591398156
+            }
+          ],
+          "snapshot_costs": [
+            -1.4255932255131212,
+            -1.3004186963949287,
+            -1.419430887595877
+          ],
+          "snapshot_total": -4.145442809503927,
+          "switch_cost": 2.0,
+          "weighted_switch_cost": 0.14
+        },
+        "objective": -4.005442809503926,
+        "probability_of_optimum": 0.0056873198178597345,
+        "trajectory": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  ],
+  "run": {
+    "completed_timestamp_utc": "2026-09-09T07:07:54.289744+00:00",
+    "config": {
+      "bf_iters": 3,
+      "classiq_backend": "simulator",
+      "classiq_execution": false,
+      "dcqo_steps": 8,
+      "local_quantum_simulation": true,
+      "milp_time_limit_seconds": 30.0,
+      "qaoa_depth": 1,
+      "qaoa_maxiter": 24,
+      "sa_steps": 3000,
+      "shots_per_quantum_method": 300
+    },
+    "kind": "tiny-correctness",
+    "provenance": {
+      "git": {
+        "commit": null,
+        "dirty": false,
+        "status_porcelain": null
+      },
+      "hardware": {
+        "backend": "local-numpy-feasible-subspace",
+        "cpu_count": 9,
+        "machine": "x86_64",
+        "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+        "processor": ""
+      },
+      "seeds": {
+        "bf_dcqo": 103,
+        "dcqo": 102,
+        "greedy": 104,
+        "mobility": 102,
+        "network": 2,
+        "qaoa": 101,
+        "simulated_annealing": 105
+      },
+      "software": {
+        "classiq": null,
+        "numpy": "2.3.5",
+        "python": "3.13.5",
+        "scipy": "1.17.0"
+      },
+      "timestamp_utc": "2026-09-09T07:07:52.967457+00:00"
+    },
+    "status": "complete"
+  },
+  "schema": {
+    "name": "temporal-antenna-benchmark",
+    "version": "1.0.0"
+  }
+}

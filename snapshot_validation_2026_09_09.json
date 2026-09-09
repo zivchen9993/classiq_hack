@@ -1,0 +1,61 @@
+{
+  "kind": "snapshot-one-hot-feasibility-validation",
+  "timestamp_utc": "2026-09-09T07:19:37.956456+00:00",
+  "instance": {
+    "S": 3,
+    "T": 3,
+    "qubits": 9,
+    "tilt_levels_deg": [
+      0.0,
+      5.0,
+      10.0
+    ],
+    "network_seed": 4,
+    "feasible_configurations": 27,
+    "hilbert_dimension": 512
+  },
+  "config": {
+    "p": 1,
+    "shots": 1000,
+    "maxiter": 60,
+    "optimizer_restarts": 3
+  },
+  "software": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "exact": {
+    "objective": -1.5027343108621185,
+    "config": [
+      1,
+      1,
+      1
+    ]
+  },
+  "methods": [
+    {
+      "name": "QAOA-X + one-hot penalty",
+      "mixer": "x",
+      "best_sampled_objective": -1.5027343108621185,
+      "gap_to_exact": 0.0,
+      "probability_of_optimum": 0.018467617666549873,
+      "feasible_shot_fraction": 0.338,
+      "parameter_search_circuit_executions": 135,
+      "final_sampling_shots": 1000,
+      "wall_time_seconds": 0.11173434999955134
+    },
+    {
+      "name": "QAOA-XY + Dicke/W state",
+      "mixer": "xy",
+      "best_sampled_objective": -1.5027343108621185,
+      "gap_to_exact": 0.0,
+      "probability_of_optimum": 0.16927573493519849,
+      "feasible_shot_fraction": 1.0,
+      "parameter_search_circuit_executions": 55,
+      "final_sampling_shots": 1000,
+      "wall_time_seconds": 0.04131389299982402
+    }
+  ],
+  "interpretation": "XY feasibility is structural; this tiny statevector run is a correctness/encoding demonstration, not evidence of temporal quantum advantage."
+}
